@@ -347,10 +347,10 @@
                 <div class="paywall" id="paywall">
                     <h3>\ud83d\udd12 Unlock Full Optimization</h3>
                     <p>Your score is ready. To get the AI-optimized resume with all keywords properly integrated, pay $7 (one-time, no subscription).</p>
-                    <a href="https://eddyscanlan.gumroad.com/l/tailoredfit" class="btn btn-pay" target="_blank">
+                    <a href="https://eddyscanlan.gumroad.com/l/tailoredfit" class="btn btn-pay" target="_blank" onclick="saveBeforePayment()">
                         \ud83d\udcb3 Get Optimized Resume - $7
                     </a>
-                    <p style="font-size: 0.8em; margin-top: 10px;">Instant access after payment. No account needed.</p>
+                    <p style="font-size: 0.8em; margin-top: 10px;">Instant access after payment. Your resume text is saved in your browser so you won't lose it.</p>
                 </div>
 
                 <!-- Results (hidden until paid) -->
@@ -359,7 +359,7 @@
                     <div class="optimized-resume" id="optimizedResume"></div>
                     <div style="margin-top: 15px;">
                         <button class="btn btn-copy" onclick="copyResume()">\ud83d\udccb Copy to Clipboard</button>
-                        <button class="btn btn-copy" onclick="downloadResume()">\ud83d\udcc4 Download as .txt</button>
+                        <button class="btn btn-copy" onclick="downloadResume()">📄 Download PDF</button>
                     </div>
                 </div>
             </div>
@@ -389,7 +389,7 @@
                 <div class="feature">
                     <div class="feature-icon">\ud83d\udcb0</div>
                     <h3>One-Time $7 Payment</h3>
-                    <p>No subscription. No recurring fees. Pay once, optimize as many resumes as you want.</p>
+                    <p>No subscription. No recurring fees. Pay once, download your optimized resume as PDF, done.</p>
                 </div>
             </div>
         </div>
@@ -405,11 +405,11 @@
                 <ul>
                     <li>Free ATS score check</li>
                     <li>Free keyword gap analysis</li>
-                    <li>AI-optimized resume</li>
-                    <li>Unlimited resumes</li>
+                    <li>1 AI-optimized resume</li>
+                    <li>Unlimited PDF downloads</li>
                     <li>No subscription</li>
                     <li>No account needed</li>
-                    <li>Instant download</li>
+                    <li>Instant access after payment</li>
                 </ul>
                 <button class="btn btn-primary" onclick="document.getElementById('analyzeBtn').scrollIntoView({behavior: 'smooth'})">
                     Start Free Check
@@ -443,7 +443,7 @@
             </div>
             <div class="faq-item">
                 <h3>Can I use this for multiple jobs?</h3>
-                <p>Absolutely. The $7 payment gives you unlimited uses. Optimize your resume for every job you apply to.</p>
+                <p>The $7 payment gives you one AI-optimized resume for one job description. To tailor your resume for a different job, you can purchase again at $7. Additional resume variants are planned at $4.99 (coming soon).</p>
             </div>
         </div>
     </div>
@@ -476,11 +476,14 @@
     <!-- Footer -->
     <div class="footer">
         <div class="container">
-            <p>&copy; 2026 TailoredFit by FitScore Labs. All rights reserved.</p>
+            <p>&copy; 2026 TailoredFit by Scanlan Labs. All rights reserved.</p>
             <p>TailoredFit is an AI-assisted tool. Always review the optimized resume for accuracy before submitting job applications.</p>
             <p><a href="how-to-beat-ats.html">How to Beat ATS Systems in 2026</a> | <a href="https://eddyscanlan.gumroad.com/l/tailoredfit">Get $7 AI Optimization</a></p>
         </div>
     </div>
+
+    <!-- html2pdf.js for client-side PDF generation (MIT license) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <script>
         const POLLINATIONS_URL = 'https://text.pollinations.ai/';
@@ -565,6 +568,10 @@
                 return;
             }
 
+            // Save inputs to localStorage so they survive the Gumroad redirect
+            localStorage.setItem('resumeText', resume);
+            localStorage.setItem('jobDescText', jobDesc);
+
             // Hide previous results
             document.getElementById('scoreDisplay').style.display = 'none';
             document.getElementById('paywall').style.display = 'none';
@@ -643,6 +650,14 @@
             }
         }
 
+        function saveBeforePayment() {
+            // Save inputs to localStorage before Gumroad redirect
+            const resume = document.getElementById('resume').value.trim();
+            const jobDesc = document.getElementById('jobdesc').value.trim();
+            if (resume) localStorage.setItem('resumeText', resume);
+            if (jobDesc) localStorage.setItem('jobDescText', jobDesc);
+        }
+
         async function generateOptimized() {
             const resume = document.getElementById('resume').value.trim();
             const jobDesc = document.getElementById('jobdesc').value.trim();
@@ -700,7 +715,34 @@ Output ONLY the optimized resume text, no commentary.`;
 
             } catch (err) {
                 document.getElementById('loading').style.display = 'none';
-                showAlert('Error optimizing resume: ' + err.message + '. Please try again.', 'error');
+
+                // Fallback: if AI fails, show keyword gaps with manual optimization guide
+                const keywords = extractKeywords(jobDesc);
+                const result = calculateMatchScore(resume, keywords);
+                const missingKeywords = result.missing.join(', ');
+
+                const fallbackHtml = '<div style="padding: 20px; background: #fff3cd; border-radius: 8px; margin-bottom: 15px;">' +
+                    '<strong>\u26a0\ufe0f AI Optimization Temporarily Unavailable</strong><br>' +
+                    'The AI service is busy. Here\'s your manual optimization guide based on your keyword analysis:' +
+                    '</div>' +
+                    '<p><strong>Your ATS match score: ' + result.score + '%</strong> (' + result.matched + '/' + result.total + ' keywords)</p>' +
+                    '<p><strong>Missing keywords to add to your resume:</strong></p>' +
+                    '<p style="color: #c0392b; font-weight: bold;">' + missingKeywords + '</p>' +
+                    '<p><strong>How to fix:</strong></p>' +
+                    '<ol>' +
+                    '<li>Review the missing keywords above</li>' +
+                    '<li>Add them naturally to your experience bullet points</li>' +
+                    '<li>Don\'t keyword-stuff - integrate them where relevant to your actual experience</li>' +
+                    '<li>Re-check your score after editing to see improvement</li>' +
+                    '</ol>' +
+                    '<p style="font-size: 0.85em; color: #666;">You can try the AI optimization again in a few minutes by refreshing the page.</p>';
+
+                document.getElementById('optimizedResume').innerHTML = fallbackHtml;
+                document.getElementById('results').style.display = 'block';
+                document.getElementById('paywall').style.display = 'none';
+                document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+
+                showAlert('AI service was busy. Showing manual optimization guide instead.', 'info');
             }
         }
 
@@ -715,11 +757,46 @@ Output ONLY the optimized resume text, no commentary.`;
 
         function downloadResume() {
             const text = document.getElementById('optimizedResume').textContent;
-            const blob = new Blob([text], { type: 'text/plain' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = 'optimized-resume.txt';
-            a.click();
+            if (!text || text.length < 10) {
+                showAlert('No resume to download. Please generate an optimized resume first.', 'error');
+                return;
+            }
+
+            // Build a clean, ATS-friendly HTML document for PDF rendering
+            const resumeHtml = '<div style="font-family: Georgia, serif; font-size: 11pt; line-height: 1.4; color: #222; padding: 20px;">' +
+                '<pre style="white-space: pre-wrap; word-wrap: break-word; font-family: Georgia, serif; font-size: 11pt; margin: 0;">' +
+                text.replace(/</g, '&lt;').replace(/>/g, '&gt;') +
+                '</pre></div>';
+
+            const opt = {
+                margin: [0.5, 0.5, 0.5, 0.5],
+                filename: 'tailoredfit-optimized-resume.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+
+            // Show loading state
+            const btn = event.target;
+            const origText = btn.textContent;
+            btn.textContent = '📄 Generating PDF...';
+            btn.disabled = true;
+
+            html2pdf().set(opt).from(resumeHtml).save().then(() => {
+                btn.textContent = origText;
+                btn.disabled = false;
+                showAlert('PDF downloaded successfully!', 'info');
+            }).catch(err => {
+                // Fallback: download as .txt if PDF generation fails
+                const blob = new Blob([text], { type: 'text/plain' });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = 'tailoredfit-optimized-resume.txt';
+                a.click();
+                btn.textContent = origText;
+                btn.disabled = false;
+                showAlert('PDF generation failed, downloaded as .txt instead.', 'error');
+            });
         }
     </script>
 </body>
