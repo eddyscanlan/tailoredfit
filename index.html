@@ -3,400 +3,692 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TailoredFit - AI Resume Tailoring | Get past ATS in 30 seconds</title>
-    <meta name="description" content="Tailor your resume for any job description in 30 seconds. ATS-optimized, keyword-matched, ready to submit. One-time $7. No subscription.">
-    <meta name="keywords" content="resume tailor, ATS resume, resume optimization, job application, resume keywords">
+    <title>TailoredFit - AI ATS Resume Optimizer | Score & Optimize Your Resume</title>
+    <meta name="description" content="Upload your resume and job description. Get an ATS compatibility score, keyword gap analysis, and an AI-optimized resume that gets past filters. One-time $7.">
+    <meta name="keywords" content="ATS resume optimizer, resume keyword match, ATS score, resume scanner, job application tool">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0a0e1a;
-            color: #e4e7ec;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            color: #1a1a2e;
+            background: #f8f9fa;
             line-height: 1.6;
         }
-        .container { max-width: 700px; margin: 0 auto; padding: 20px; }
-        .hero { text-align: center; padding: 60px 20px 40px; }
-        .hero h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #4ade80, #38bdf8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 16px;
-        }
-        .hero .tagline { font-size: 1.2rem; color: #9ca3af; margin-bottom: 8px; }
-        .hero .subtag { font-size: 0.95rem; color: #6b7280; }
-        .features { display: grid; gap: 12px; margin: 32px 0; }
-        .feature {
-            background: #131826;
-            border: 1px solid #1f2937;
-            border-radius: 8px;
-            padding: 16px 20px;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-        }
-        .feature .icon { font-size: 1.3rem; flex-shrink: 0; }
-        .feature h3 { font-size: 1rem; color: #e4e7ec; margin-bottom: 2px; }
-        .feature p { font-size: 0.85rem; color: #9ca3af; }
-        .price-card {
-            background: linear-gradient(135deg, #131826, #1a2030);
-            border: 2px solid #4ade80;
-            border-radius: 12px;
-            padding: 32px;
+        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 0 40px;
             text-align: center;
-            margin: 24px 0;
         }
-        .price-card .price {
-            font-size: 3rem;
-            font-weight: 800;
-            color: #4ade80;
-        }
-        .price-card .price-period { font-size: 1rem; color: #9ca3af; }
-        .price-card .price-desc { font-size: 0.85rem; color: #6b7280; margin-top: 4px; }
-        .cta-button {
+        .hero h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .hero p { font-size: 1.2em; opacity: 0.95; max-width: 600px; margin: 0 auto 20px; }
+        .hero .badge {
             display: inline-block;
-            background: #4ade80;
-            color: #0a0e1a;
-            font-size: 1.15rem;
-            font-weight: 700;
-            padding: 16px 40px;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-top: 10px;
+        }
+
+        /* Social proof bar */
+        .social-proof {
+            background: #fff;
+            padding: 12px 0;
+            border-bottom: 1px solid #e0e0e0;
+            text-align: center;
+            font-size: 0.9em;
+            color: #666;
+        }
+        .social-proof strong { color: #764ba2; }
+
+        /* Tool section */
+        .tool-section {
+            background: white;
+            padding: 40px 0;
+            min-height: 500px;
+        }
+        .tool-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 20px;
+            border: 1px solid #e0e0e0;
+        }
+        .tool-card h2 { margin-bottom: 20px; font-size: 1.5em; }
+        textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
             border-radius: 8px;
-            text-decoration: none;
-            border: none;
+            font-family: monospace;
+            font-size: 0.9em;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+        textarea:focus { border-color: #667eea; outline: none; }
+        label { font-weight: 600; display: block; margin-bottom: 8px; margin-top: 15px; }
+        label:first-child { margin-top: 0; }
+
+        /* Score display */
+        .score-display {
+            text-align: center;
+            padding: 30px;
+            display: none;
+        }
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+        .score-high { background: #d4edda; color: #155724; }
+        .score-medium { background: #fff3cd; color: #856404; }
+        .score-low { background: #f8d7da; color: #721c24; }
+        .score-label { font-size: 1.1em; margin-bottom: 10px; }
+        .keyword-list {
+            text-align: left;
+            max-width: 500px;
+            margin: 20px auto;
+        }
+        .keyword-item {
+            display: inline-block;
+            padding: 4px 12px;
+            margin: 4px;
+            border-radius: 4px;
+            font-size: 0.85em;
+        }
+        .kw-missing { background: #f8d7da; color: #721c24; }
+        .kw-found { background: #d4edda; color: #155724; }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1.05em;
+            font-weight: 600;
             cursor: pointer;
-            transition: transform 0.1s, box-shadow 0.2s;
-            margin: 8px 0;
+            border: none;
+            transition: all 0.3s;
+            text-decoration: none;
+            text-align: center;
         }
-        .cta-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(74, 222, 128, 0.3);
+        .btn-primary {
+            background: #667eea;
+            color: white;
         }
-        .cta-button:active { transform: translateY(0); }
-        .social-proof { text-align: center; margin: 24px 0; }
-        .social-proof .stars { color: #fbbf24; font-size: 1.1rem; letter-spacing: 2px; }
-        .social-proof .proof-text { font-size: 0.85rem; color: #9ca3af; margin-top: 4px; }
-        .faq { margin: 32px 0; }
-        .faq h2 { font-size: 1.3rem; margin-bottom: 16px; color: #e4e7ec; }
-        .faq-item { margin-bottom: 12px; }
-        .faq-item h4 { font-size: 0.95rem; color: #38bdf8; margin-bottom: 4px; }
-        .faq-item p { font-size: 0.85rem; color: #9ca3af; }
-        .footer { text-align: center; padding: 24px 0; color: #4b5563; font-size: 0.8rem; }
-        .guarantee { text-align: center; margin: 16px 0; }
-        .guarantee span { font-size: 0.8rem; color: #6b7280; }
-        .hidden { display: none; }
+        .btn-primary:hover { background: #5568d3; }
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .btn-pay {
+            background: #28a745;
+            color: white;
+            font-size: 1.2em;
+            padding: 15px 40px;
+            margin: 10px 0;
+        }
+        .btn-pay:hover { background: #218838; }
+        .btn-copy {
+            background: #6c757d;
+            color: white;
+            font-size: 0.9em;
+            padding: 8px 20px;
+        }
+        .btn-copy:hover { background: #5a6268; }
+
+        /* Results */
+        .results {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+        .results h3 { margin-bottom: 15px; }
+        .optimized-resume {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 0.9em;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #e0e0e0;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Paywall */
+        .paywall {
+            display: none;
+            text-align: center;
+            padding: 30px;
+            background: #fff3cd;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 1px solid #ffe082;
+        }
+        .paywall h3 { color: #856404; margin-bottom: 10px; }
+        .paywall p { margin-bottom: 15px; color: #856404; }
+
+        /* Features */
+        .features {
+            padding: 50px 0;
+            background: #f8f9fa;
+        }
+        .features h2 { text-align: center; margin-bottom: 30px; font-size: 2em; }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+        .feature {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+        }
+        .feature-icon { font-size: 2.5em; margin-bottom: 10px; }
+        .feature h3 { margin-bottom: 8px; }
+        .feature p { color: #666; font-size: 0.95em; }
+
+        /* Pricing */
+        .pricing {
+            padding: 50px 0;
+            text-align: center;
+        }
+        .pricing h2 { margin-bottom: 30px; font-size: 2em; }
+        .price-card {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            max-width: 400px;
+            margin: 0 auto;
+            border: 2px solid #667eea;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .price-card .price { font-size: 3em; font-weight: bold; color: #667eea; }
+        .price-card .price-period { font-size: 0.9em; color: #666; }
+        .price-card ul { list-style: none; margin: 20px 0; text-align: left; }
+        .price-card li { padding: 8px 0; border-bottom: 1px solid #eee; }
+        .price-card li:last-child { border-bottom: none; }
+        .price-card li::before { content: "\2713\fe0f "; }
+
+        /* FAQ */
+        .faq {
+            padding: 50px 0;
+            background: #f8f9fa;
+        }
+        .faq h2 { text-align: center; margin-bottom: 30px; font-size: 2em; }
+        .faq-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #e0e0e0;
+        }
+        .faq-item h3 { margin-bottom: 8px; color: #667eea; }
+        .faq-item p { color: #555; }
+
+        /* Footer */
+        .footer {
+            background: #1a1a2e;
+            color: #aaa;
+            padding: 30px 0;
+            text-align: center;
+            font-size: 0.9em;
+        }
+        .footer a { color: #667eea; text-decoration: none; }
+
+        /* Alert */
+        .alert {
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin: 10px 0;
+            display: none;
+        }
+        .alert-error { background: #f8d7da; color: #721c24; }
+        .alert-info { background: #d1ecf1; color: #0c5460; }
+
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 1.8em; }
+            .hero p { font-size: 1em; }
+            .feature-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="hero">
+    <!-- Hero -->
+    <div class="hero">
+        <div class="container">
             <h1>TailoredFit</h1>
-            <div class="tagline">Tailor your resume for any job in 30 seconds</div>
-            <div class="subtag">ATS-optimized. Keyword-matched. Ready to submit.</div>
-        </div>
-
-        <div class="social-proof">
-            <div class="stars">★★★★★</div>
-            <div class="proof-text">Helps you get past Applicant Tracking Systems that filter 75% of resumes</div>
-        </div>
-
-        <div class="features">
-            <div class="feature">
-                <div class="icon">⚡</div>
-                <div>
-                    <h3>30-second turnaround</h3>
-                    <p>Paste your resume and the job description. Get a tailored version instantly.</p>
-                </div>
-            </div>
-            <div class="feature">
-                <div class="icon">🎯</div>
-                <div>
-                    <h3>ATS keyword matching</h3>
-                    <p>Our AI identifies the exact keywords from the job description and weaves them into your resume bullets naturally.</p>
-                </div>
-            </div>
-            <div class="feature">
-                <div class="icon">📄</div>
-                <div>
-                    <h3>Ready to download</h3>
-                    <p>Get a clean, formatted resume you can copy or download immediately. No signup, no account, no subscription.</p>
-                </div>
-            </div>
-            <div class="feature">
-                <div class="icon">🔒</div>
-                <div>
-                    <h3>Private and secure</h3>
-                    <p>Your resume never touches our servers. Everything runs in your browser. Nothing is stored.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="price-card">
-            <div class="price">$7</div>
-            <div class="price-period">one-time payment</div>
-            <div class="price-desc">No subscription. No recurring fees. Pay once, use immediately.</div>
-        </div>
-
-        <div style="text-align: center;">
-            <button class="cta-button" id="cta-btn" onclick="scrollToTool()">
-                Tailor My Resume →
-            </button>
-        </div>
-
-        <div class="guarantee">
-            <span>🔒 30-day money-back guarantee · Secure payment via Gumroad</span>
-        </div>
-
-        <div class="faq">
-            <h2>FAQ</h2>
-            <div class="faq-item">
-                <h4>How does this work?</h4>
-                <p>You paste your current resume and the job description you're applying for. Our AI rewrites your resume to match the job's keywords and requirements, optimized for ATS systems.</p>
-            </div>
-            <div class="faq-item">
-                <h4>What's ATS?</h4>
-                <p>Applicant Tracking Systems. 75% of resumes get filtered out by software before a human ever sees them. TailoredFit optimizes your resume to pass these filters.</p>
-            </div>
-            <div class="faq-item">
-                <h4>Do I need to create an account?</h4>
-                <p>No. Pay $7, paste your resume, get your tailored version. That's it. No signup, no email, no password.</p>
-            </div>
-            <div class="faq-item">
-                <h4>Is my data safe?</h4>
-                <p>Yes. Everything runs in your browser. Your resume text is never stored on any server.</p>
-            </div>
-            <div class="faq-item">
-                <h4>What if I'm not satisfied?</h4>
-                <p>30-day money-back guarantee, no questions asked. Email us and we'll refund you.</p>
-            </div>
-        </div>
-
-        <div class="footer">
-            <p>&copy; 2026 TailoredFit. All rights reserved.</p>
-            <p style="margin-top:4px;">support@tailoredfit.app</p>
+            <p>AI-powered ATS resume optimizer. Get your ATS compatibility score, keyword gap analysis, and an optimized resume that beats the bots.</p>
+            <div class="badge">\u2705 No subscription. No signup. Pay once, use forever.</div>
         </div>
     </div>
 
-    <!-- Tool section (hidden until payment) -->
-    <div id="tool-section" class="container hidden">
-        <div style="text-align:center; margin-bottom: 24px;">
-            <h1 style="font-size: 1.8rem; color: #4ade80; margin-bottom: 8px;">TailoredFit Tool</h1>
-            <p style="color: #9ca3af;">Paste your resume and job description below</p>
+    <!-- Social proof -->
+    <div class="social-proof">
+        <div class="container">
+            \ud83d\udd3a Over <strong>75%</strong> of resumes are rejected by ATS before a human sees them. Don't be one of them.
         </div>
+    </div>
 
-        <div style="margin-bottom: 20px;">
-            <label style="display:block; font-size: 0.9rem; color: #38bdf8; margin-bottom: 6px;">1. Paste your current resume</label>
-            <textarea id="resume-input" rows="10" placeholder="Paste your full resume text here..." style="width:100%; background:#131826; border:1px solid #1f2937; border-radius:8px; padding:12px; color:#e4e7ec; font-family:monospace; font-size:0.85rem; resize:vertical;"></textarea>
-        </div>
+    <!-- Tool -->
+    <div class="tool-section">
+        <div class="container">
+            <div class="tool-card">
+                <h2>\ud83d\udd0d Free ATS Score Check</h2>
+                <p style="color: #666; margin-bottom: 20px;">Paste your resume and the job description below. Get your ATS match score and keyword analysis for free. Optimize for $7.</p>
 
-        <div style="margin-bottom: 20px;">
-            <label style="display:block; font-size: 0.9rem; color: #38bdf8; margin-bottom: 6px;">2. Paste the job description</label>
-            <textarea id="job-input" rows="10" placeholder="Paste the full job description here..." style="width:100%; background:#131826; border:1px solid #1f2937; border-radius:8px; padding:12px; color:#e4e7ec; font-family:monospace; font-size:0.85rem; resize:vertical;"></textarea>
-        </div>
+                <label for="resume">1. Your Resume</label>
+                <textarea id="resume" placeholder="Paste your resume text here..."></textarea>
 
-        <div style="text-align: center; margin-bottom: 20px;">
-            <button class="cta-button" id="generate-btn" onclick="generateTailoredResume()">
-                Generate Tailored Resume →
-            </button>
-        </div>
+                <label for="jobdesc">2. Job Description</label>
+                <textarea id="jobdesc" placeholder="Paste the job description here..."></textarea>
 
-        <div id="loading" class="hidden" style="text-align:center; padding: 20px;">
-            <p style="color: #38bdf8; font-size: 1rem;">⚡ Tailoring your resume...</p>
-            <p style="color: #6b7280; font-size: 0.85rem; margin-top: 4px;">This takes about 15-30 seconds</p>
-        </div>
+                <div style="margin-top: 20px;">
+                    <button class="btn btn-primary" id="analyzeBtn" onclick="analyzeResume()">
+                        \u2699\ufe0f Analyze ATS Match
+                    </button>
+                </div>
 
-        <div id="result-section" class="hidden">
-            <label style="display:block; font-size: 0.9rem; color: #4ade80; margin-bottom: 6px;">✓ Your tailored resume:</label>
-            <textarea id="result-output" rows="20" style="width:100%; background:#131826; border:1px solid #4ade80; border-radius:8px; padding:12px; color:#e4e7ec; font-family:monospace; font-size:0.85rem; resize:vertical;"></textarea>
-            <div style="text-align: center; margin-top: 12px;">
-                <button class="cta-button" onclick="downloadResume()" style="font-size: 0.95rem; padding: 10px 24px;">Download as .txt</button>
-                <button class="cta-button" onclick="copyResult()" style="font-size: 0.95rem; padding: 10px 24px; background: #38bdf8; color: #0a0e1a;">Copy to clipboard</button>
+                <div class="alert alert-error" id="errorAlert"></div>
+                <div class="alert alert-info" id="infoAlert"></div>
+
+                <!-- Loading -->
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Analyzing your resume against the job description...</p>
+                    <p style="font-size: 0.85em; color: #999;">This takes 10-20 seconds. We're checking keyword matches, ATS compatibility, and generating optimizations.</p>
+                </div>
+
+                <!-- Score Display -->
+                <div class="score-display" id="scoreDisplay">
+                    <div class="score-circle" id="scoreCircle">0%</div>
+                    <div class="score-label" id="scoreLabel"></div>
+                    <div id="keywordAnalysis"></div>
+                </div>
+
+                <!-- Paywall for optimization -->
+                <div class="paywall" id="paywall">
+                    <h3>\ud83d\udd12 Unlock Full Optimization</h3>
+                    <p>Your score is ready. To get the AI-optimized resume with all keywords properly integrated, pay $7 (one-time, no subscription).</p>
+                    <a href="https://eddyscanlan.gumroad.com/l/tailoredfit" class="btn btn-pay" target="_blank">
+                        \ud83d\udcb3 Get Optimized Resume - $7
+                    </a>
+                    <p style="font-size: 0.8em; margin-top: 10px;">Instant access after payment. No account needed.</p>
+                </div>
+
+                <!-- Results (hidden until paid) -->
+                <div class="results" id="results">
+                    <h3>\u2705 Your ATS-Optimized Resume</h3>
+                    <div class="optimized-resume" id="optimizedResume"></div>
+                    <div style="margin-top: 15px;">
+                        <button class="btn btn-copy" onclick="copyResume()">\ud83d\udccb Copy to Clipboard</button>
+                        <button class="btn btn-copy" onclick="downloadResume()">\ud83d\udcc4 Download as .txt</button>
+                    </div>
+                </div>
             </div>
-            <div id="keywords-section" class="hidden" style="margin-top: 16px; padding: 12px; background: #131826; border-radius: 8px; border: 1px solid #1f2937;">
-                <p style="font-size: 0.85rem; color: #9ca3af; margin-bottom: 4px;">Keywords matched:</p>
-                <p id="keywords-list" style="font-size: 0.8rem; color: #4ade80;"></p>
+        </div>
+    </div>
+
+    <!-- Features -->
+    <div class="features">
+        <div class="container">
+            <h2>Why TailoredFit?</h2>
+            <div class="feature-grid">
+                <div class="feature">
+                    <div class="feature-icon">\ud83d\udcca</div>
+                    <h3>ATS Match Score</h3>
+                    <p>See exactly how compatible your resume is with the job description. Know your chances before you apply.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">\ud83d\udd11</div>
+                    <h3>Keyword Gap Analysis</h3>
+                    <p>Identify missing keywords that ATS systems look for. See what's found and what's missing at a glance.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">\u2702\ufe0f</div>
+                    <h3>AI Optimization</h3>
+                    <p>Get a rewritten resume that naturally integrates missing keywords while preserving your experience.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">\ud83d\udcb0</div>
+                    <h3>One-Time $7 Payment</h3>
+                    <p>No subscription. No recurring fees. Pay once, optimize as many resumes as you want.</p>
+                </div>
             </div>
         </div>
+    </div>
 
-        <div id="error-section" class="hidden" style="margin-top: 16px; padding: 16px; background: #1a1020; border: 1px solid #ef4444; border-radius: 8px;">
-            <p style="color: #ef4444; font-size: 0.9rem;" id="error-message"></p>
+    <!-- Pricing -->
+    <div class="pricing">
+        <div class="container">
+            <h2>Simple Pricing</h2>
+            <div class="price-card">
+                <div class="price">$7</div>
+                <div class="price-period">one-time payment</div>
+                <ul>
+                    <li>Free ATS score check</li>
+                    <li>Free keyword gap analysis</li>
+                    <li>AI-optimized resume</li>
+                    <li>Unlimited resumes</li>
+                    <li>No subscription</li>
+                    <li>No account needed</li>
+                    <li>Instant download</li>
+                </ul>
+                <button class="btn btn-primary" onclick="document.getElementById('analyzeBtn').scrollIntoView({behavior: 'smooth'})">
+                    Start Free Check
+                </button>
+            </div>
+            <p style="margin-top: 20px; color: #999; font-size: 0.9em;">
+                Competitors charge $15-$30/month. We charge $7 once.
+            </p>
         </div>
+    </div>
 
-        <div style="text-align: center; margin-top: 32px;">
-            <button onclick="location.reload()" style="background: none; border: none; color: #6b7280; font-size: 0.85rem; cursor: pointer; text-decoration: underline;">← Back to landing page</button>
+    <!-- FAQ -->
+    <div class="faq">
+        <div class="container">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-item">
+                <h3>What is ATS?</h3>
+                <p>ATS (Applicant Tracking System) is software used by 99% of Fortune 500 companies and most mid-size companies to filter resumes. It scans for keywords and qualifications from the job description. If your resume doesn't match, it gets rejected before a human ever sees it.</p>
+            </div>
+            <div class="faq-item">
+                <h3>How does the free check work?</h3>
+                <p>Paste your resume and the job description. We'll analyze keyword matches, calculate your ATS compatibility score, and show you which keywords are missing. This is completely free, no signup required.</p>
+            </div>
+            <div class="faq-item">
+                <h3>What do I get for $7?</h3>
+                <p>An AI-optimized version of your resume that naturally integrates all the missing keywords identified in the analysis. The AI rewrites your experience bullet points to include ATS-critical keywords while keeping your content truthful and professional.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Is my data safe?</h3>
+                <p>Yes. Your resume text is processed in your browser and sent only to the AI for optimization. We don't store your resume, don't require an account, and don't track your personal information.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Can I use this for multiple jobs?</h3>
+                <p>Absolutely. The $7 payment gives you unlimited uses. Optimize your resume for every job you apply to.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="container">
+            <p>&copy; 2026 TailoredFit by FitScore Labs. All rights reserved.</p>
+            <p>TailoredFit is an AI-assisted tool. Always review the optimized resume for accuracy before submitting job applications.</p>
         </div>
     </div>
 
     <script>
-        // Gumroad payment verification
-        function checkPayment() {
-            const params = new URLSearchParams(window.location.search);
-            // Gumroad redirect params
-            if (params.get('paid') === '1' || params.get('receipt_id') || params.get('order_id')) {
-                return true;
-            }
-            // Also check localStorage for previous payment
-            if (localStorage.getItem('tailoredfit_paid') === 'true') {
-                return true;
-            }
-            return false;
+        const POLLINATIONS_URL = 'https://text.pollinations.ai/';
+
+        function showAlert(msg, type) {
+            const alert = document.getElementById(type === 'error' ? 'errorAlert' : 'infoAlert');
+            alert.textContent = msg;
+            alert.style.display = 'block';
+            setTimeout(() => alert.style.display = 'none', 5000);
         }
 
-        function scrollToTool() {
-            // If not paid, redirect to Gumroad
-            // GUMROAD_URL placeholder - will be replaced when Gumroad product is created
-            const gumroadUrl = 'GUMROAD_URL_PLACEHOLDER';
-            
-            if (gumroadUrl === 'GUMROAD_URL_PLACEHOLDER') {
-                // Demo mode: show tool directly (for testing)
-                alert('Payment integration pending. In demo mode - showing tool for free.');
-                document.getElementById('tool-section').classList.remove('hidden');
-                document.querySelector('.hero').scrollIntoView({ behavior: 'smooth' });
-                return;
-            }
-            
-            // Redirect to Gumroad for payment
-            window.location.href = gumroadUrl;
+        function extractKeywords(jobDesc) {
+            // Common ATS keywords: skills, tools, qualifications
+            const stopWords = new Set([
+                'the', 'and', 'for', 'are', 'but', 'not', 'you', 'all', 'any', 'can', 'her', 'was', 'one', 'our',
+                'out', 'his', 'has', 'had', 'how', 'its', 'may', 'new', 'now', 'old', 'see', 'way', 'who', 'did',
+                'get', 'got', 'let', 'say', 'she', 'too', 'use', 'will', 'would', 'could', 'should', 'with', 'from',
+                'they', 'that', 'this', 'have', 'been', 'were', 'what', 'when', 'your', 'each', 'make', 'like',
+                'into', 'them', 'than', 'then', 'also', 'more', 'most', 'some', 'such', 'only', 'own', 'same',
+                'very', 'just', 'must', 'over', 'under', 'about', 'after', 'before', 'between', 'through', 'during',
+                'above', 'below', 'there', 'where', 'here', 'which', 'these', 'those', 'other', 'while',
+                'is', 'a', 'an', 'in', 'on', 'at', 'to', 'of', 'or', 'as', 'be', 'by', 'we', 'it', 'if',
+                'so', 'do', 'no', 'up', 'he', 'me', 'my', 'us', 'am', 'or', 'job', 'work', 'team', 'role',
+                'position', 'company', 'candidate', 'applicant', 'responsibilities', 'requirements', 'qualifications',
+                'preferred', 'must', 'plus', 'etc', 'including', 'using', 'able', 'strong', 'excellent',
+                'good', 'great', 'year', 'years', 'experience', 'ability', 'knowledge', 'understanding',
+                'skills', 'relevant', 'minimum', 'required', 'desired', 'ideal', 'familiarity', 'proficiency',
+                'including', 'plus', 'equal', 'opportunity', 'employer', 'background', 'check',
+                'resume', 'cover', 'letter', 'apply', 'application', 'submit', 'please', 'send',
+                'salary', 'benefits', 'remote', 'hybrid', 'onsite', 'office', 'location',
+                'full-time', 'part-time', 'contract', 'permanent', 'temporary',
+                'is', 'the', 'a', 'an', 'in', 'on', 'at', 'to', 'of', 'or', 'as', 'be', 'by', 'we', 'it', 'if'
+            ]);
+
+            // Extract potential keywords (2-4 word phrases and single words)
+            const words = jobDesc.toLowerCase().replace(/[^a-z0-9\s+#.]/g, ' ').split(/\s+/);
+            const phrases = jobDesc.match(/\b(?:[a-z]+[\s-]){1,3}[a-z]+\b/gi) || [];
+
+            const wordFreq = {};
+            words.forEach(w => {
+                if (w.length > 2 && !stopWords.has(w) && !/^\d+$/.test(w)) {
+                    wordFreq[w] = (wordFreq[w] || 0) + 1;
+                }
+            });
+
+            // Sort by frequency, take top 30
+            const keywords = Object.entries(wordFreq)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 30)
+                .map(([word, freq]) => ({ word, freq }));
+
+            return keywords;
         }
 
-        // If returning from Gumroad payment, show tool
-        if (checkPayment()) {
-            localStorage.setItem('tailoredfit_paid', 'true');
-            document.getElementById('tool-section').classList.remove('hidden');
-            document.querySelector('.container').scrollIntoView({ behavior: 'smooth' });
+        function calculateMatchScore(resume, keywords) {
+            const resumeLower = resume.toLowerCase();
+            let matched = 0;
+            let missing = [];
+
+            keywords.forEach(kw => {
+                if (resumeLower.includes(kw.word)) {
+                    matched++;
+                } else {
+                    missing.push(kw.word);
+                }
+            });
+
+            const score = Math.round((matched / keywords.length) * 100);
+            return { score, matched, missing, total: keywords.length };
         }
 
-        // Resume generation using Pollinations.ai (free, no API key, no auth)
-        async function generateTailoredResume() {
-            const resume = document.getElementById('resume-input').value.trim();
-            const job = document.getElementById('job-input').value.trim();
+        async function analyzeResume() {
+            const resume = document.getElementById('resume').value.trim();
+            const jobDesc = document.getElementById('jobdesc').value.trim();
 
-            if (!resume) {
-                showError('Please paste your current resume first.');
+            if (!resume || resume.length < 50) {
+                showAlert('Please paste your resume text (at least 50 characters).', 'error');
                 return;
             }
-            if (!job) {
-                showError('Please paste the job description first.');
+            if (!jobDesc || jobDesc.length < 50) {
+                showAlert('Please paste the job description (at least 50 characters).', 'error');
                 return;
             }
-            if (resume.length < 50) {
-                showError('Your resume seems too short. Please paste a more complete version.');
-                return;
-            }
+
+            // Hide previous results
+            document.getElementById('scoreDisplay').style.display = 'none';
+            document.getElementById('paywall').style.display = 'none';
+            document.getElementById('results').style.display = 'none';
 
             // Show loading
-            document.getElementById('generate-btn').classList.add('hidden');
-            document.getElementById('loading').classList.remove('hidden');
-            document.getElementById('result-section').classList.add('hidden');
-            document.getElementById('error-section').classList.add('hidden');
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('analyzeBtn').disabled = true;
 
             try {
-                const prompt = `You are an expert resume writer and ATS optimization specialist. Below is a job description and a candidate's current resume.
+                // Extract keywords and calculate score
+                const keywords = extractKeywords(jobDesc);
+                const result = calculateMatchScore(resume, keywords);
 
-Your task:
-1. Analyze the job description for key skills, qualifications, and keywords
-2. Rewrite the resume to naturally incorporate those keywords
-3. Restructure bullet points to highlight relevant experience for THIS specific job
-4. Ensure the language is ATS-friendly (standard section headers, no fancy formatting)
-5. Keep all information truthful - do not invent new experience or skills
-6. Maintain the candidate's original tone and voice
-7. Keep it to one page if possible
+                // Display score
+                document.getElementById('loading').style.display = 'none';
+                const scoreDisplay = document.getElementById('scoreDisplay');
+                scoreDisplay.style.display = 'block';
 
-Output the rewritten resume in plain text format with standard sections:
-- Full Name (from original)
-- Contact Info (from original)
-- Professional Summary (2-3 lines, tailored to the job)
-- Experience (rewritten bullets, reordered by relevance)
-- Education
-- Skills (reorganized to match job priorities)
+                // Score circle
+                const circle = document.getElementById('scoreCircle');
+                circle.textContent = result.score + '%';
+                circle.className = 'score-circle ' + 
+                    (result.score >= 70 ? 'score-high' : result.score >= 40 ? 'score-medium' : 'score-low');
 
-After the resume, on a new line starting with "KEYWORDS:", list the top 10 keywords you matched from the job description.
+                // Score label
+                document.getElementById('scoreLabel').textContent = 
+                    result.score >= 70 ? '\u2705 Good match! Your resume has most ATS keywords.' :
+                    result.score >= 40 ? '\u26a0\ufe0f Moderate match. Some important keywords are missing.' :
+                    '\u274c Low match. Your resume needs optimization to pass ATS filters.';
 
----JOB DESCRIPTION---
-${job}
+                // Keyword analysis
+                const keywordHTML = 
+                    '<div class="keyword-list">' +
+                    '<h4 style="margin-bottom: 10px;">Keyword Analysis (' + result.matched + '/' + result.total + ' matched)</h4>' +
+                    '<div><strong style="font-size: 0.9em;">\u2705 Found in your resume:</strong></div>' +
+                    keywords.filter(k => resume.toLowerCase().includes(k.word)).map(k => 
+                        '<span class="keyword-item kw-found">' + k.word + '</span>'
+                    ).join('') +
+                    '<div style="margin-top: 10px;"><strong style="font-size: 0.9em;">\u274c Missing from your resume:</strong></div>' +
+                    result.missing.map(w => 
+                        '<span class="keyword-item kw-missing">' + w + '</span>'
+                    ).join('') +
+                    '</div>';
 
----CURRENT RESUME---
+                document.getElementById('keywordAnalysis').innerHTML = keywordHTML;
+
+                // Show paywall
+                document.getElementById('paywall').style.display = 'block';
+
+                // Scroll to results
+                scoreDisplay.scrollIntoView({ behavior: 'smooth' });
+
+            } catch (err) {
+                document.getElementById('loading').style.display = 'none';
+                showAlert('Error analyzing resume: ' + err.message + '. Please try again.', 'error');
+            }
+
+            document.getElementById('analyzeBtn').disabled = false;
+        }
+
+        // Check if user has paid (URL parameter from Gumroad redirect)
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('paid') === '1') {
+            // Pre-fill from localStorage if available
+            const savedResume = localStorage.getItem('resumeText');
+            const savedJobDesc = localStorage.getItem('jobDescText');
+            if (savedResume) document.getElementById('resume').value = savedResume;
+            if (savedJobDesc) document.getElementById('jobdesc').value = savedJobDesc;
+            
+            if (savedResume && savedJobDesc) {
+                analyzeResume().then(() => {
+                    // Generate optimized resume
+                    generateOptimized();
+                });
+            }
+        }
+
+        async function generateOptimized() {
+            const resume = document.getElementById('resume').value.trim();
+            const jobDesc = document.getElementById('jobdesc').value.trim();
+
+            if (!resume || !jobDesc) return;
+
+            // Save to localStorage in case of page reload
+            localStorage.setItem('resumeText', resume);
+            localStorage.setItem('jobDescText', jobDesc);
+
+            document.getElementById('loading').style.display = 'block';
+
+            try {
+                const prompt = `You are an expert ATS resume optimizer. 
+
+RESUME:
 ${resume}
 
----REWRITTEN RESUME---`;
+JOB DESCRIPTION:
+${jobDesc}
 
-                // Call Pollinations.ai free text API (no auth, CORS enabled)
-                const response = await fetch('https://text.pollinations.ai/', {
+Instructions:
+1. Rewrite the resume to naturally integrate ALL missing keywords from the job description
+2. Keep all original experience, education, and skills truthful
+3. Optimize the language to match ATS systems
+4. Use standard resume format with clear sections
+5. Do not invent new experience - only rephrase existing content
+6. Ensure the resume reads naturally, not keyword-stuffed
+7. Include a professional summary tailored to the job
+
+Output ONLY the optimized resume text, no commentary.`;
+
+                const response = await fetch(POLLINATIONS_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
+                        messages: [{ role: 'user', content: prompt }],
                         model: 'openai',
-                        messages: [{ role: 'user', content: prompt }]
+                        seed: Math.floor(Math.random() * 1000000)
                     })
                 });
 
-                if (!response.ok) {
-                    throw new Error('API returned ' + response.status);
-                }
+                if (!response.ok) throw new Error('AI service error: ' + response.status);
 
-                const resultText = await response.text();
+                const data = await response.json();
+                const optimizedText = data.choices?.[0]?.message?.content || data.response || 'Error generating optimization. Please try again.';
 
-                // Split resume and keywords
-                let resumeText = resultText;
-                let keywords = '';
-                const keywordsIdx = resultText.indexOf('KEYWORDS:');
-                if (keywordsIdx !== -1) {
-                    resumeText = resultText.substring(0, keywordsIdx).trim();
-                    keywords = resultText.substring(keywordsIdx + 9).trim();
-                }
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('optimizedResume').textContent = optimizedText;
+                document.getElementById('results').style.display = 'block';
+                document.getElementById('paywall').style.display = 'none';
 
-                // Show result
-                document.getElementById('result-output').value = resumeText;
-                document.getElementById('loading').classList.add('hidden');
-                document.getElementById('result-section').classList.remove('hidden');
-                document.getElementById('generate-btn').classList.remove('hidden');
-
-                // Show keywords if available
-                if (keywords) {
-                    document.getElementById('keywords-list').textContent = keywords;
-                    document.getElementById('keywords-section').classList.remove('hidden');
-                }
+                // Scroll to results
+                document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
 
             } catch (err) {
-                console.error('Generation error:', err);
-                let errorMsg = 'An error occurred while generating your resume. ';
-                if (err.message && err.message.includes('rate')) {
-                    errorMsg = 'Rate limit reached. Please try again in a minute.';
-                } else if (err.message && err.message.includes('Failed to fetch')) {
-                    errorMsg = 'Network error. Please check your connection and try again.';
-                } else {
-                    errorMsg += 'Please try again. If the problem persists, email support@tailoredfit.app for a refund.';
-                }
-                showError(errorMsg);
-                document.getElementById('loading').classList.add('hidden');
-                document.getElementById('generate-btn').classList.remove('hidden');
+                document.getElementById('loading').style.display = 'none';
+                showAlert('Error optimizing resume: ' + err.message + '. Please try again.', 'error');
             }
         }
 
-        function showError(msg) {
-            document.getElementById('error-message').textContent = msg;
-            document.getElementById('error-section').classList.remove('hidden');
+        function copyResume() {
+            const text = document.getElementById('optimizedResume').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                showAlert('Resume copied to clipboard!', 'info');
+            }).catch(() => {
+                showAlert('Could not copy. Please select the text manually.', 'error');
+            });
         }
 
         function downloadResume() {
-            const text = document.getElementById('result-output').value;
+            const text = document.getElementById('optimizedResume').textContent;
             const blob = new Blob([text], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = url;
-            a.download = 'tailored-resume.txt';
+            a.href = URL.createObjectURL(blob);
+            a.download = 'optimized-resume.txt';
             a.click();
-            URL.revokeObjectURL(url);
-        }
-
-        function copyResult() {
-            const text = document.getElementById('result-output').value;
-            navigator.clipboard.writeText(text).then(() => {
-                const btn = event.target;
-                const originalText = btn.textContent;
-                btn.textContent = 'Copied!';
-                setTimeout(() => { btn.textContent = originalText; }, 2000);
-            });
         }
     </script>
 </body>
