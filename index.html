@@ -385,10 +385,10 @@
                         <div style="font-size: 0.9em; color: #555; margin-bottom: 5px;">\u2705 One-time $7 - no subscription, no account</div>
                         <div style="font-size: 0.9em; color: #555;">\u2705 Instant access - results in 15 seconds</div>
                     </div>
-                    <a href="https://eddyscanlan.gumroad.com/l/tailoredfit" class="btn btn-pay" target="_blank" onclick="saveBeforePayment()">
+                    <a href="STRIPE_PAYMENT_LINK_URL" class="btn btn-pay" target="_blank" onclick="saveBeforePayment()">
                         \ud83d\udcb3 Get My Optimized Resume - $7
                     </a>
-                    <p style="font-size: 0.8em; margin-top: 10px; color: #856404;">Your resume text is saved in your browser. You won't lose it. Secure payment via Gumroad.</p>
+                    <p style="font-size: 0.8em; margin-top: 10px; color: #856404;">Your resume text is saved in your browser. You won't lose it. Secure payment via Stripe.</p>
                     <p style="font-size: 0.75em; margin-top: 5px; color: #aaa;">Competitors charge $15-$30/month. You pay $7 once.</p>
                 </div>
 
@@ -517,7 +517,7 @@
         <div class="container">
             <p>&copy; 2026 TailoredFit by Scanlan Labs. All rights reserved.</p>
             <p>TailoredFit is an AI-assisted tool. Always review the optimized resume for accuracy before submitting job applications.</p>
-            <p><a href="how-to-beat-ats.html">How to Beat ATS Systems in 2026</a> | <a href="ats-resume-keywords-guide.html">ATS Resume Keywords Guide</a> | <a href="https://eddyscanlan.gumroad.com/l/tailoredfit">Get $7 AI Optimization</a></p>
+            <p><a href="how-to-beat-ats.html">How to Beat ATS Systems in 2026</a> | <a href="ats-resume-keywords-guide.html">ATS Resume Keywords Guide</a> | <a href="STRIPE_PAYMENT_LINK_URL">Get $7 AI Optimization</a></p>
         </div>
     </div>
 
@@ -607,7 +607,7 @@
                 return;
             }
 
-            // Save inputs to localStorage so they survive the Gumroad redirect
+            // Save inputs to localStorage so they survive the Stripe redirect
             localStorage.setItem('resumeText', resume);
             localStorage.setItem('jobDescText', jobDesc);
 
@@ -672,7 +672,7 @@
             document.getElementById('analyzeBtn').disabled = false;
         }
 
-        // Check if user has paid (URL parameter from Gumroad redirect)
+        // Check if user has paid (URL parameter from Stripe redirect)
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('paid') === '1') {
             // Pre-fill from localStorage if available
@@ -690,7 +690,7 @@
         }
 
         function saveBeforePayment() {
-            // Save inputs to localStorage before Gumroad redirect
+            // Save inputs to localStorage before Stripe redirect
             const resume = document.getElementById('resume').value.trim();
             const jobDesc = document.getElementById('jobdesc').value.trim();
             if (resume) localStorage.setItem('resumeText', resume);
